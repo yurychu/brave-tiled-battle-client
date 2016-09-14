@@ -1,38 +1,24 @@
-import socket, select, pickle
+import socket
 
-server = socket.socket(
-    socket.AF_INET,
-    socket.SOCK_STREAM
-)
-server.bind(('', 4000))
-server.listen(5)
+HOST = ''
+PORT = 9090
 
-clients = []
+sock = socket.socket()
+
+sock.bind((HOST, PORT))
+print('binding to {} {} ...'.format(HOST, PORT))
+
+sock.listen(1)
+
+print("starting listen...")
+conn, addr = sock.accept()
+print('Connect:', addr)
 
 while True:
-    Connections, wlist, xlist = select.select(
-        [server], [], [], 0.05
-    )
-    for Connection in Connections:
-        client, Informations = Connection.accept()
-        clients.append(client)
+    data = conn.recv(1024)
+    print(data)
+    if not data:
+        break
+    conn.send(data.upper())
 
-    clientsList = []
-    try:
-        clientsList, wlist, xlist = select.select(
-            clients, [], [], 0.05
-        )
-    except select.error:
-        pass
-    else:
-        for clientInList in clientsList:
-            data = clientInList.recv(1024)
-            data = pickle.loads(data)
-            print(data)
-            data = 'Welcome'
-            data = pickle.dumps(data)
-            clientInList.send(data)
-
-            clientInList.close()
-
-server.close()
+conn.close()

@@ -1,17 +1,15 @@
-import socket, pickle
+import socket
 
-server = socket.socket(
-    socket.AF_INET,
-    socket.SOCK_STREAM
-)
-server.connect(('127.0.0.1', 4000))
+HOST = 'localhost'
+PORT = 9090
 
-while True:
-    data = 'Im logged!'
-    data = pickle.dumps(data)
-    server.send(data)
-    data = server.recv(1024)
-    data = pickle.loads(data)
-    print(data)
+sock = socket.socket()
+sock.connect((HOST, PORT))
 
-server.close()
+message = b'hello meen'
+sock.send(message)
+
+data = sock.recv(1024)
+sock.close()
+
+print(data)
