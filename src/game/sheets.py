@@ -1,6 +1,6 @@
 import pygame
 
-import config
+from config.colors import BLACK
 
 
 class TileSheet(object):
@@ -15,5 +15,5 @@ class TileSheet(object):
             (0, 0),
             (x, y, width, height)
         )
-        image.set_colorkey(config.BLACK)
+        image.set_colorkey(BLACK)
         return image
