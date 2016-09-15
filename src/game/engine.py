@@ -4,47 +4,32 @@ import pygame
 from pygame.locals import *
 
 
-class Display(object):
-
-    def __init__(self, resolution, text_caption):
-        pygame.init()
-        self.displaysurf = pygame.display.set_mode(resolution)
-        pygame.display.set_caption(text_caption)
-
-
 class Game(object):
 
-    def __init__(self, displaysurf, level):
-        self.displaysurf = displaysurf
-        self.level = level
+    def __init__(self, resolution, caption):
+        pygame.init()
+        self.display_surface = pygame.display.set_mode(resolution)
+        pygame.display.set_caption(caption)
+        self.fps_clock = pygame.time.Clock()
 
-    def system_events(self):
-        pass
-
-    def game_loop(self):
+    def run(self, fps, level):
         while True:
-            self.level.init_state()
-            self.level.events_handling()
-            self.level.do_actions()
-            self.level.update()
+            level.draw()
+
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+
+            pygame.display.update()
+            self.fps_clock.tick(fps)
 
 
 class Level(object):
 
-    def __init__(self, level_objects):
-        self.level_objects = level_objects
+    def __init__(self, display_surace, bg_color):
+        self.display_surface = display_surace
+        self.bg_color = bg_color
 
-    def init_state(self):
-        for level_object in self.level_objects:
-            level_object.set_state()
-
-    def events_handling(self):
-        for level_object in self.level_objects:
-            level_object.events()
-
-    def do_actions(self):
-        for level_object in self.level_objects:
-            level_object.actions()
-
-    def update(self):
-        pygame.display.update()
+    def draw(self):
+        self.display_surface.fill(self.bg_color)
