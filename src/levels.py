@@ -45,9 +45,10 @@ class StartLevel(Level):
         tile_src = TileSet('src/resources/png/map.png')
         tile_set = tile_src.compile_tileset(TILE_SIZE)
 
+        y = 0
         for row in tile_map:
+            x = 0
             for tile in row:
-                self.display_surface.blit(tile_set[tile], (0, 0))
-
-
-
+                self.display_surface.blit(tile_set[tile], (x, y))
+                x += TILE_SIZE
+            y += TILE_SIZE
